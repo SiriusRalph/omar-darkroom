@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Omar · Photographe de rue</title>
+  <meta name="description" content="Portfolio de démonstration : Omar, photographe de rue à Casablanca. Entrez dans sa chambre noire.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..700&family=Mrs+Saint+Delafield&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- The language switch (always visible, top right) -->
+<div class="lang" role="group" data-i18n-aria="ariaLang" aria-label="Langue">
+  <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+  <button type="button" data-lang="en" aria-pressed="false">EN</button>
+</div>
+
+<!-- ===================== ACT 1 + 2 : THE INTRO ===================== -->
+<section id="intro" class="intro" data-i18n-aria="ariaIntro" aria-label="Introduction">
+
+  <!-- Faint shapes of the room, only visible under the flashlight -->
+  <div class="hints" id="hints" aria-hidden="true">
+    <span class="h-line"></span>
+    <!-- the hanging prints are added by intro.js, one per project -->
+    <span class="h-film"></span>
+    <span class="h-timer"><i></i></span>
+    <span class="h-bottle hb1"></span><span class="h-bottle hb2"></span><span class="h-bottle hb3"></span>
+    <span class="h-lamp"></span>
+    <span class="h-tray"></span>
+    <span class="h-word">Casa</span>
+  </div>
+
+  <!-- Dust floating in the beam of light -->
+  <canvas class="dust" id="dust" aria-hidden="true"></canvas>
+
+  <!-- The darkness, with a hole of light that follows the mouse -->
+  <div class="flashlight" aria-hidden="true"></div>
+
+  <div class="intro-brand">Omar <span data-i18n="introTag">Chambre noire · Casablanca</span></div>
+
+  <!-- The centre of the stage: button, then photo + film strips -->
+  <div class="stage">
+    <div class="start" id="start">
+      <p class="hint" id="hint" data-i18n="moveHint">Bougez la souris…</p>
+      <div class="viewfinder">
+        <span class="vf tl"></span><span class="vf tr"></span><span class="vf bl"></span><span class="vf br"></span>
+        <button type="button" class="shoot" id="shoot"><span class="rec" aria-hidden="true"></span><span data-i18n="shoot">Prendre une photo</span></button>
+      </div>
+      <p class="readout" aria-hidden="true">ISO 400 · f/2.8 · 1/60 · <span id="frameNo">01</span>/36</p>
+    </div>
+
+    <figure class="polaroid" id="polaroid" hidden>
+      <div class="paper"><img src="images/omar.jpg" data-i18n-alt="portraitAlt" alt="Portrait d'Omar, appareil photo à l'œil" width="640" height="800"></div>
+      <figcaption data-i18n="caption">Omar · photographe de rue</figcaption>
+    </figure>
+
+    <!-- The film strips that unroll out of the photo -->
+    <nav class="strips" id="strips" data-i18n-aria="ariaSections" aria-label="Sections" hidden>
+      <button type="button" class="strip" data-go="about"      style="--a:-152deg; --d:0ms"><span class="film"></span><span class="label" data-i18n="navAbout">À propos</span></button>
+      <button type="button" class="strip" data-go="projects"   style="--a:-28deg;  --d:120ms"><span class="film"></span><span class="label" data-i18n="navProjects">Projets</span></button>
+      <button type="button" class="strip" data-go="experience" style="--a:152deg;  --d:240ms"><span class="film"></span><span class="label" data-i18n="navExperience">Expérience</span></button>
+      <button type="button" class="strip" data-go="contact"    style="--a:28deg;   --d:360ms"><span class="film"></span><span class="label" data-i18n="navContact">Contact</span></button>
+    </nav>
+  </div>
+
+  <svg class="stamp stamp-intro" viewBox="0 0 120 120" aria-hidden="true">
+    <defs><path id="ring1" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+    <circle cx="60" cy="60" r="58"/>
+    <text><textPath href="#ring1" textLength="280" lengthAdjust="spacing" data-i18n="stamp">OMAR · CASABLANCA · ARGENTIQUE · </textPath></text>
+    <text class="st-mid" x="60" y="69" text-anchor="middle">35</text>
+  </svg>
+
+  <div class="flash" id="flash" aria-hidden="true"></div>
+  <button type="button" class="skip" id="skip" data-i18n="skip">Passer l'intro →</button>
+</section>
+
+<!-- ===================== ACT 3 : THE DARKROOM ===================== -->
+<section id="darkroom" class="darkroom" data-i18n-aria="ariaDarkroom" aria-label="La chambre noire" hidden>
+  <div id="gl" class="gl"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <p class="no3d" data-i18n="noWebgl"></p>
+
+  <header class="dr-top">
+    <div class="brand">Omar <span data-i18n="brandSub">photographe de rue · Casablanca</span></div>
+    <button type="button" class="ghost" id="replay" data-i18n="replay">↺ Revoir l'intro</button>
+  </header>
+
+  <aside class="panel" id="panel" aria-live="polite"></aside>
+
+  <nav class="dr-nav" id="drNav" data-i18n-aria="ariaDrNav" aria-label="Sections de la chambre noire">
+    <button type="button" data-go="about"><i>01</i> <span data-i18n="navAbout">À propos</span></button>
+    <button type="button" data-go="experience"><i>02</i> <span data-i18n="navExperience">Expérience</span></button>
+    <button type="button" data-go="projects"><i>03</i> <span data-i18n="navProjects">Projets</span></button>
+    <button type="button" data-go="contact"><i>04</i> <span data-i18n="navContact">Contact</span></button>
+    <span class="dr-bar" aria-hidden="true"><span id="drBar"></span></span>
+  </nav>
+
+  <p class="dr-hint" id="drHint" data-i18n="drHint">Faites défiler pour avancer dans la chambre noire</p>
+  <p class="credit" id="credit"></p>
+  <div class="tip" id="tip" aria-hidden="true"></div>
+  <svg class="stamp stamp-room" viewBox="0 0 120 120" aria-hidden="true">
+    <defs><path id="ring2" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+    <circle cx="60" cy="60" r="58"/>
+    <text><textPath href="#ring2" textLength="280" lengthAdjust="spacing" data-i18n="stamp">OMAR · CASABLANCA · ARGENTIQUE · </textPath></text>
+    <text class="st-mid" x="60" y="69" text-anchor="middle">35</text>
+  </svg>
+</section>
+
+<div class="redwash" id="redwash" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- three.js: the library that draws the 3D room -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/room.js"></script>
+<script src="js/intro.js"></script>
+</body>
+</html>
