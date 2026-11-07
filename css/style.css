@@ -280,10 +280,15 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--rose); outline-
   position: fixed; z-index: 6;
   right: calc(20px + env(safe-area-inset-right, 0px));
   bottom: calc(22px + env(safe-area-inset-bottom, 0px));
-  background: none; border: 0; border-bottom: 1.5px solid currentColor; padding: 0 0 3px;
-  font-size: 10.5px; color: var(--muted);
+  display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px;
+  background: rgba(0, 0, 0, 0.55); border: 1.5px solid rgba(242, 235, 226, 0.55);
+  font-size: 11px; color: var(--text);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
-.skip:hover { color: var(--text); }
+.skip:hover, .skip:focus-visible {
+  background: var(--paper); color: var(--char); outline: none;
+  box-shadow: 4px 4px 0 var(--rose); transform: translate(-2px, -2px);
+}
 
 .redwash {
   position: fixed; inset: 0; background: #3a0603; opacity: 0; pointer-events: none; z-index: 8;
@@ -390,7 +395,8 @@ blockquote {
 }
 .f-img::after { content: ""; position: absolute; inset: 0; background: var(--paper); transition: opacity 0.6s; }
 .frame.dev .f-img::after { opacity: 0; }
-.frame.busy .f-img::after { animation: reveal 2.4s 1.45s ease-in forwards; }
+/* --s is the speed of the current print (1 = first print, smaller = faster) */
+.frame.busy .f-img::after { animation: reveal calc(2.4s * var(--s, 1)) calc(1.45s * var(--s, 1)) ease-in forwards; }
 @keyframes reveal { to { opacity: 0.05; } }
 .frame:not(.dev):not(.busy):hover .f-img::after { opacity: 0.85; }
 .f-no { font-family: var(--script); font-size: 22px; line-height: 0.8; color: var(--rose); margin-top: 4px; }
@@ -420,6 +426,9 @@ blockquote {
 }
 .btn:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--rose); }
 .btn.alt { background: transparent; color: var(--char); }
+.btn.small { padding: 8px 12px; font-size: 9.5px; }
+.btn:disabled { opacity: 0.55; cursor: default; transform: none; box-shadow: none; }
+.row.between { justify-content: space-between; margin-top: 0; }
 .link { background: none; border: 0; padding: 4px 0; font-size: 13px; font-weight: 600; color: var(--char); text-decoration: underline; text-underline-offset: 4px; }
 .link:hover { color: var(--rose-deep); }
 .mail { font-weight: 800; font-stretch: 80%; font-size: 22px; user-select: all; color: var(--char) !important; letter-spacing: 0.01em; }

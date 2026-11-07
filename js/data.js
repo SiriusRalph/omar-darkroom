@@ -142,6 +142,7 @@ window.OMAR = {
     prev:       { fr: "← Précédent", en: "← Previous" },
     next:       { fr: "Tirage suivant →", en: "Next print →" },
     all:        { fr: "Toutes les séries", en: "All series" },
+    developAll: { fr: "Tout révéler", en: "Develop all" },
     copy:       { fr: "Copier l'e-mail", en: "Copy e-mail" },
     copied:     { fr: "Copié ✓", en: "Copied ✓" },
     write:      { fr: "Écrire à Omar", en: "Write to Omar" },

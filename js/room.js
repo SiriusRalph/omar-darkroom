@@ -358,11 +358,23 @@
   // =========================================================
   //  Developing a print: lift → into the tray → appear → back on the line
   // =========================================================
+  //  The first print takes its time; the next ones go faster (speed < 1 = faster).
+  //  "Develop all" queues every blank print and runs them quickest of all.
+  let queue = [], allMode = false, speed = 1;
+  function developAll() {
+    if (!webgl) { developed.fill(true); selectedProject = null; render(true); return; }
+    queue = developed.map((d, i) => (d || i === developing ? -1 : i)).filter((i) => i >= 0);
+    allMode = true;
+    if (!busyPrint && queue.length) develop(queue.shift());
+    else render(false);
+  }
+
   function develop(i) {
     if (!webgl) { developed[i] = true; selectedProject = i; render(true); return; }
     if (developed[i]) { selectedProject = i; render(true); return; }
     if (busyPrint) return;
     busyPrint = true; developing = i; selectedProject = null;
+    speed = allMode ? 0.4 : developed.some(Boolean) ? 0.55 : 1;
     render(false);
     const pr = prints[i];
     const tx = TRAY_X[0], tz = TRAY_Z - 0.62, flat = -Math.PI / 2;
@@ -376,11 +388,14 @@
       { p: [tx, 1.6, tz], r: flat, t: 0.35 },
       { p: [H.x, H.y, H.z], r: 0, t: 1.0 }
     ];
+    keys.forEach((k) => (k.t *= speed));
     if (reduce) keys.forEach((k) => (k.t = Math.min(k.t, 0.2)));
     pr.anim = { keys, k: 1, time: 0, done: () => {
-      developed[i] = true; selectedProject = i; busyPrint = false; developing = null;
+      developed[i] = true; busyPrint = false; developing = null;
       pr.wet = 40;                        // it drips for a while
-      render(true);
+      if (allMode && queue.length) { develop(queue.shift()); return; }   // next one in "develop all"
+      if (allMode) { allMode = false; selectedProject = null; render(true); return; }
+      selectedProject = i; render(true);
     } };
     trays[0].glow = 1;
   }
@@ -459,8 +474,9 @@
         const pi = D.projectsIntro;
         h = head(pi.eyebrow) + `<h2>${T(pi.title)}</h2><p>${T(pi.text)}</p>
           <div class="meter"><span style="width:${done / total * 100}%"></span></div>
-          <p class="note">${done}/${total} ${esc(U('countDev'))}</p>
-          <div class="sheet">`
+          <div class="row between"><p class="note">${done}/${total} ${esc(U('countDev'))}</p>
+          ${done < total ? `<button type="button" class="btn small" data-devall="1" ${allMode ? 'disabled' : ''}>${esc(allMode ? U('developing') : U('developAll'))}</button>` : ''}</div>
+          <div class="sheet" style="--s:${speed}">`
           + D.projects.map((p, i) => {
             const state = developed[i] ? 'dev' : developing === i ? 'busy' : '';
             const label = developed[i] ? U('developed') : developing === i ? U('developing') : U('toDevelop');
@@ -492,6 +508,7 @@
     if (t.dataset.tray !== undefined) { selectTray(+t.dataset.tray); }
     if (t.dataset.print !== undefined) { develop(+t.dataset.print); }
     if (t.dataset.all) { selectedProject = null; render(true); }
+    if (t.dataset.devall) { developAll(); }
     if (t.id === 'copyMail') {
       const mail = D.contact.email;
       navigator.clipboard.writeText(mail).then(() => { t.textContent = U('copied'); })
