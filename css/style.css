@@ -500,7 +500,15 @@ blockquote {
   }
 
   .dr-top { right: calc(20px + env(safe-area-inset-right, 0px)); }
-  .ghost { margin-top: 44px; }   /* sits under the FR/EN switch */
+  .brand span { font-size: 20px; white-space: normal; max-width: 200px; line-height: 0.95; }
+  /* "Replay intro" sits right under the FR/EN switch, as a real tap-sized button */
+  .ghost {
+    position: absolute; right: 0; top: 42px;
+    display: inline-flex; align-items: center; min-height: 38px; padding: 0 12px;
+    border: 1.5px solid var(--line-l); background: rgba(0, 0, 0, 0.45);
+    font-size: 9.5px; letter-spacing: 0.14em;
+  }
+  .ghost:active { background: var(--paper); color: var(--char); }
   .panel {
     top: auto; transform: none;
     left: calc(12px + env(safe-area-inset-left, 0px));
